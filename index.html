@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Παιχνίδι Γνώσεων: Ο Μύθος της Θέτιδας</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+            color: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 3px solid #d4af37;
+            margin-top: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid rgba(212, 175, 55, 0.5);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            color: #d4af37;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            color: #e8c878;
+            font-weight: normal;
+        }
+
+        .question-container {
+            background-color: rgba(26, 42, 58, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-number {
+            color: #d4af37;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option {
+            background-color: rgba(52, 73, 94, 0.9);
+            border: 2px solid #3a506b;
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: rgba(67, 97, 133, 0.9);
+            border-color: #d4af37;
+            transform: translateY(-3px);
+        }
+
+        .option.selected {
+            background-color: rgba(41, 128, 185, 0.8);
+            border-color: #3498db;
+        }
+
+        .option.correct {
+            background-color: rgba(46, 204, 113, 0.8);
+            border-color: #27ae60;
+        }
+
+        .option.wrong {
+            background-color: rgba(231, 76, 60, 0.8);
+            border-color: #c0392b;
+        }
+
+        .option-letter {
+            background-color: #2c3e50;
+            color: #f5f5f5;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background-color: #2980b9;
+        }
+
+        .option.correct .option-letter {
+            background-color: #27ae60;
+        }
+
+        .option.wrong .option-letter {
+            background-color: #c0392b;
+        }
+
+        .feedback {
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.4rem;
+            display: none;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 2px solid #27ae60;
+            color: #a8ffc9;
+        }
+
+        .feedback.wrong {
+            background-color: rgba(231, 76, 60, 0.2);
+            border: 2px solid #c0392b;
+            color: #ffb8b3;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.4rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        .btn-next {
+            background-color: #d4af37;
+            color: #2c3e50;
+        }
+
+        .btn-next:hover {
+            background-color: #e8c878;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-restart {
+            background-color: #3a506b;
+            color: #f5f5f5;
+        }
+
+        .btn-restart:hover {
+            background-color: #4a6a8b;
+            transform: translateY(-3px);
+        }
+
+        .btn-back {
+            background-color: #2c3e50;
+            color: #f5f5f5;
+        }
+
+        .btn-back:hover {
+            background-color: #3a506b;
+            transform: translateY(-3px);
+        }
+
+        .results-container {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .results-title {
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .score-display {
+            font-size: 5rem;
+            color: #ffffff;
+            margin: 30px 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 20px 50px;
+            border-radius: 20px;
+            border: 4px solid #d4af37;
+        }
+
+        .score-text {
+            font-size: 2rem;
+            color: #e8c878;
+            margin-bottom: 40px;
+        }
+
+        .message {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+            }
+            
+            .option {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1.2rem;
+            }
+            
+            .results-title {
+                font-size: 2.2rem;
+            }
+            
+            .score-display {
+                font-size: 3.5rem;
+                padding: 15px 30px;
+            }
+            
+            .score-text {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>Παιχνίδι Γνώσεων</h1>
+            <h2>Ο Μύθος της Θέτιδας: Η Αρχιτεκτονική του Σύμπαντος</h2>
+        </div>
+        
+        <div id="game-area">
+            <div class="question-container">
+                <div class="question-number">Ερώτηση <span id="question-num">1</span> από 20</div>
+                <div class="question-text" id="question-text">Ποιος ήταν ο ρόλος της Θέτιδας στην αρχέγονη αρχή του σύμπαντος, σύμφωνα με τον μύθο;</div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Οι επιλογές θα εμφανίζονται εδώ μέσω JavaScript -->
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="btn btn-back" id="back-btn">
+                    <i class="fas fa-home"></i> Αρχική
+                </button>
+                <button class="btn btn-next" id="next-btn">
+                    Επόμενη <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="results-container" id="results-container">
+            <div class="results-title">Αποτελέσματα Παιχνιδιού</div>
+            <div class="score-display" id="final-score">0/20</div>
+            <div class="score-text" id="score-text"></div>
+            
+            <div class="message" id="result-message"></div>
+            
+            <div class="buttons-container" style="justify-content: center; margin-top: 40px;">
+                <button class="btn btn-restart" id="restart-btn">
+                    <i class="fas fa-redo"></i> Παίξτε ξανά
+                </button>
+                <button class="btn btn-back" id="results-back-btn">
+                    <i class="fas fa-home"></i> Αρχική
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Στοιχεία του παιχνιδιού
+        const gameArea = document.getElementById('game-area');
+        const resultsContainer = document.getElementById('results-container');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const backBtn = document.getElementById('back-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const resultsBackBtn = document.getElementById('results-back-btn');
+        const questionNumElement = document.getElementById('question-num');
+        const finalScoreElement = document.getElementById('final-score');
+        const scoreTextElement = document.getElementById('score-text');
+        const resultMessageElement = document.getElementById('result-message');
+
+        // Μεταβλητές του παιχνιδιού
+        let currentQuestion = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let selectedOption = null;
+        let gameCompleted = false;
+
+        // Βάση δεδομένων ερωτήσεων για τον μύθο της Θέτιδας
+        const questions = [
+            {
+                question: "Ποιος ήταν ο ρόλος της Θέτιδας στην αρχέγονη αρχή του σύμπαντος, σύμφωνα με τον μύθο;",
+                options: [
+                    "Α) Η δημιουργός της πρώτης ανθρώπινης ζωής",
+                    "Β) Η 'Θέτουσα', η δύναμη που έδωσε μορφή στο άμορφο χάος",
+                    "Γ) Η προστάτιδα της φωτιάς και της μεταλλοτεχνίας",
+                    "Δ) Η βασίλισσα των Ολυμπίων θεών"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις ήταν η 'Θέτουσα', η αρχέγονη δύναμη που έδωσε μορφή στο άμορφο χάος, λειτουργώντας ως ουράνια τεχνίτισσα."
+            },
+            {
+                question: "Τι εισήγαγε η Θέτις στον κόσμο, δίνοντας τέλος στο χάος;",
+                options: [
+                    "Α) Το φως και τη ζωή",
+                    "Β) Τον 'Πόρο' (φωτεινό μονοπάτι κίνησης) και το 'Τέκμωρ' (ιερό όριο)",
+                    "Γ) Τις τέσσερις εποχές του έτους",
+                    "Δ) Τους ανθρώπους και τα ζώα"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις εισήγαγε τον 'Πόρο' (φωτεινό μονοπάτι της κίνησης) και το 'Τέκμωρ' (το ιερό όριο που βάζει τέλος στο χάος)."
+            },
+            {
+                question: "Πώς βοήθησε η Θέτις τον Δία κατά την επανάσταση της Ήρας, του Ποσειδώνα και της Αθηνάς;",
+                options: [
+                    "Α) Του πρόσφερε μαγικές πανοπλίες",
+                    "Β) Κάλεσε τον εκατόγχειρα Βριάρεω να τον σώσει",
+                    "Γ) Μεταμόρφωσε τους επαναστάτες σε πέτρες",
+                    "Δ) Του έδωσε να πιεί από την πηγή της αθανασίας"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις ήταν η μόνη που τόλμησε να παρέμβει, καλώντας τον τρομερό εκατόγχειρα Βριάρεω για να σώσει τον θρόνο του Δία."
+            },
+            {
+                question: "Πού περιέθαλψε η Θέτις τον τραυματισμένο Ήφαιστο μετά την πτώση του από τον Όλυμπο;",
+                options: [
+                    "Α) Στο παλάτι του Ποσειδώνα",
+                    "Β) Σε μια κρυφή σπηλιά για εννέα χρόνια",
+                    "Γ) Στο ιερό της στην Κρήτη",
+                    "Δ) Στο βουνό της Ίδης"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις και η Ευρυνόμη περιέθαλψαν τον Ήφαιστο στην κρυφή τους σπηλιά για εννέα χρόνια, όπου εκείνος τελειοποίησε την τέχνη του."
+            },
+            {
+                question: "Ποιον νεαρό θεό δέχτηκε η Θέτις στην αγκαλιά της, προσφέροντάς του καταφύγιο από τον Λυκούργο;",
+                options: [
+                    "Α) Τον Άρη",
+                    "Β) Τον Διόνυσο",
+                    "Γ) Τον Απόλλωνα",
+                    "Δ) Τον Ερμή"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις δέχτηκε τον νεαρό Διόνυσο στην αγκαλιά της, προσφέροντάς του καταφύγιο από τον τρόμο του Λυκούργου."
+            },
+            {
+                question: "Τι προφητεία απειλούσε τους Ολύμπιους θεούς σχετικά με τον γιο της Θέτιδας;",
+                options: [
+                    "Α) Θα καταστρέψει τον Όλυμπο",
+                    "Β) Θα γίνει βασιλιάς των ανθρώπων",
+                    "Γ) Θα γίνει ισχυρότερος από τον πατέρα του",
+                    "Δ) Θα κλέψει τη φωτιά από τους θεούς"
+                ],
+                correct: 2,
+                explanation: "Σωστά! Μια προφητεία αποκάλυψε πως ο γιος που θα γεννούσε η Θέτις θα γινόταν ισχυρότερος από τον πατέρα του."
+            },
+            {
+                question: "Ποιος ήταν ο θνητός σύζυγος που επέβαλαν οι θεοί στη Θέτιδα;",
+                options: [
+                    "Α) Ο Οδυσσέας",
+                    "Β) Ο Πηλέας",
+                    "Γ) Ο Ηρακλής",
+                    "Δ) Ο Θησέας"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Ο Δίας και ο Ποσειδώνας, τρέμοντας για την εξουσία τους, αποφάσισαν να την παντρέψουν με έναν θνητό, τον Πηλέα."
+            },
+            {
+                question: "Σε ποιο σημείο της Σηπιάδας πάλεψε η Θέτις με τον Πηλέα, μεταμορφώνοντας το σώμα της σε διάφορες μορφές;",
+                options: [
+                    "Α) Στις ακτές",
+                    "Β) Σε μια σπηλιά",
+                    "Γ) Σε ένα δάσος",
+                    "Δ) Στις πλαγιές ενός βουνού"
+                ],
+                correct: 0,
+                explanation: "Σωστά! Στις ακτές της Σηπιάδας, η Θέτις πάλεψε σκληρά με τον Πηλέα, μεταμορφώνοντας το σώμα της σε διάφορες μορφές."
+            },
+            {
+                question: "Σε ποιες μορφές μεταμορφώθηκε η Θέτις κατά τη μάχη της με τον Πηλέα;",
+                options: [
+                    "Α) Φωτιά, νερό, λιοντάρι και σουπιά",
+                    "Β) Φίδι, αετός, ταύρος και δέντρο",
+                    "Γ) Λύκος, γεράκι, λιοντάρι και φτερωτό άλογο",
+                    "Δ) Πάνθηρας, καρχαρίας, φλόγα και σύννεφο"
+                ],
+                correct: 0,
+                explanation: "Σωστά! Η Θέτις πάλεψε σκληρά, μεταμορφώνοντας το σώμα της σε φωτιά, σε ορμητικό νερό, σε λιοντάρι και σε γλιστερή σουπιά."
+            },
+            {
+                question: "Πού έγινε ο γάμος της Θέτιδας και του Πηλέα;",
+                options: [
+                    "Α) Στο Παλάτι του Δία στον Όλυμπο",
+                    "Β) Στο Πήλιο, έξω από τη σπηλιά του Κένταυρου Χείρωνα",
+                    "Γ) Στις ακτές της Σηπιάδας",
+                    "Δ) Στο ιερό της Αθηνάς στην Αθήνα"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Ο γάμος τους στο Πήλιο, έξω από τη σπηλιά του Κένταυρου Χείρωνα, ήταν ένα γεγονός παγκόσμιας σημασίας."
+            },
+            {
+                question: "Τι έριξε η Έριδα στον γάμο της Θέτιδας και του Πηλέα, προκαλώντας τη διχόνοια;",
+                options: [
+                    "Α) Ένα χρυσό μήλο με την επιγραφή «τη καλλίστη»",
+                    "Β) Ένα ματωμένο ξίφος",
+                    "Γ) Ένα σπασμένο κρίνο",
+                    "Δ) Ένα μαύρο πέπλο"
+                ],
+                correct: 0,
+                explanation: "Σωστά! Η Έριδα, οργισμένη που δεν προσκλήθηκε, έριξε ανάμεσα στις θεές το χρυσό μήλο με την επιγραφή «τη καλλίστη»."
+            },
+            {
+                question: "Πόσα παιδιά είχε χάσει η Θέτις πριν τον Αχιλλέα στην προσπάθειά της να τα κάνει αθάνατα;",
+                options: [
+                    "Α) Τρία",
+                    "Β) Έξι",
+                    "Γ) Δέκα",
+                    "Δ) Δύο"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Πριν τον Αχιλλέα, είχε δει έξι παιδιά της να χάνονται στην προσπάθειά της να τα κάνει αθάνατα."
+            },
+            {
+                question: "Πώς προσπάθησε η Θέτις να κάνει τον Αχιλλέα αθάνατο;",
+                options: [
+                    "Α) Τον έβαζε τη νύχτα στη φωτιά και την ημέρα τον άλειφε με αμβροσία",
+                    "Β) Τον έπλυνε στα νερά της Στυγός, κρατώντας τον από την πτέρνα",
+                    "Γ) Του έδωσε να φάει από τα φρούτα της αθανασίας",
+                    "Δ) Και οι δύο πρώτες απαντήσεις (Α και Β) είναι σωστές"
+                ],
+                correct: 3,
+                explanation: "Σωστά! Η Θέτις χρησιμοποίησε δύο μέθοδους: τον έβαζε στη φωτιά για να κάψει το θνητό του μέρος και τον άλειφε με αμβροσία, ή/και τον βάπτισε στα νερά της Στύγας."
+            },
+            {
+                question: "Ποιο ήταν το μοναδικό τρωτό σημείο του Αχιλλέα;",
+                options: [
+                    "Α) Η πτέρνα",
+                    "Β) Ο λαιμός",
+                    "Γ) Η καρδιά",
+                    "Δ) Το μέτωπο"
+                ],
+                correct: 0,
+                explanation: "Σωστά! Η Θέτις τον κράτησε από την πτέρνα όταν τον βάπτισε στα νερά της Στύγας, καθιστώντας την πτέρνα το μοναδικό τρωτό σημείο του."
+            },
+            {
+                question: "Ποιος διέκοψε τη διαδικασία με την οποία η Θέτις προσπαθούσε να κάνει τον Αχιλλέα αθάνατο;",
+                options: [
+                    "Α) Ο Δίας",
+                    "Β) Ο Πηλέας",
+                    "Γ) Ο Χείρωνας",
+                    "Δ) Η Ήρα"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Όταν ο Πηλέας την διέκοψε, τρομοκρατημένος από το θέαμα, η Θέτις ένιωθε προδομένη και εγκατέλειψε για πάντα τη συζυγική εστία."
+            },
+            {
+                question: "Πού πήγε η Θέτις αφού εγκατέλειψε τον Πηλέα και τη συζυγική εστία;",
+                options: [
+                    "Α) Στον Όλυμπο, κοντά στους άλλους θεούς",
+                    "Β) Στα βάθη της θάλασσας",
+                    "Γ) Στη Σηπιάδα, όπου είχε παντρευτεί",
+                    "Δ) Στην Τροία"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις επέστρεψε στα βάθη της θάλασσας, αφήνοντας τον γιο της να κουβαλά το σημάδι της θνητότητας ως αιώνια κληρονομιά."
+            },
+            {
+                question: "Ποιος έφτιαξε τη θεϊκή πανοπλία που η Θέτις χάρισε στον Αχιλλέα;",
+                options: [
+                    "Α) Ο ίδιος ο Αχιλλέας",
+                    "Β) Ο Ήφαιστος",
+                    "Γ) Ο Ποσειδώνας",
+                    "Δ) Οι Κύκλωπες"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις του χάρισε τη θεϊκή πανοπλία που έφτιαξε ο Ήφαιστος, τον ίδιο που είχε περιθάλψει στην κρυφή σπηλιά."
+            },
+            {
+                question: "Πού μεταφέρθηκε ο Αχιλλέας μετά το θάνατό του στην Τροία;",
+                options: [
+                    "Α) Στον Όλυμπο",
+                    "Β) Στη Λεύκη Νήσο, στον Εύξεινο Πόντο",
+                    "Γ) Στο βασίλειο του Άδη",
+                    "Δ) Στα Ηλύσια Πεδία"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Η Θέτις άρπαξε το σώμα του γιου της από την πυρά και τον μετέφερε στη Λεύκη Νήσο, στον Εύξεινο Πόντο, έναν εναλλακτικό παράδεισο."
+            },
+            {
+                question: "Ποιος ήταν ο Κένταυρος που βοήθησε τον Πηλέα να παντρευτεί τη Θέτιδα;",
+                options: [
+                    "Α) Ο Νέσσος",
+                    "Β) Ο Φόλος",
+                    "Γ) Ο Χείρωνας",
+                    "Δ) Ο Ευρυτίων"
+                ],
+                correct: 2,
+                explanation: "Σωστά! Ο Πηλέας, ακολουθώντας τις συμβουλές του σοφού Χείρωνα, την κράτησε σφιχτά μέσα στις μεταμορφώσεις της."
+            },
+            {
+                question: "Ποιο δώρο έφερε ο Ποσειδώνας στον γάμο της Θέτιδας και του Πηλέα;",
+                options: [
+                    "Α) Ένα τρίκωπο",
+                    "Β) Αθάνατα άλογα",
+                    "Γ) Ένα μαγικό δόρυ",
+                    "Δ) Ένα χρυσό κράνος"
+                ],
+                correct: 1,
+                explanation: "Σωστά! Όλοι οι θεοί κατέβηκαν από τον Όλυμπο φέρνοντας δώρα που θα γίνονταν θρύλοι: αθάνατα άλογα από τον Ποσειδώνα."
+            }
+        ];
+
+        // Αρχικοποίηση του παιχνιδιού
+        function initGame() {
+            currentQuestion = 0;
+            score = 0;
+            correctAnswers = 0;
+            gameCompleted = false;
+            
+            gameArea.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            showQuestion();
+        }
+
+        // Εμφάνιση της τρέχουσας ερώτησης
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            questionText.textContent = q.question;
+            questionNumElement.textContent = currentQuestion + 1;
+            
+            // Καθαρισμός προηγούμενων επιλογών
+            optionsContainer.innerHTML = '';
+            feedback.style.display = 'none';
+            feedback.className = 'feedback';
+            nextBtn.disabled = true;
+            selectedOption = null;
+            
+            // Προσθήκη των επιλογών
+            const letters = ['Α', 'Β', 'Γ', 'Δ'];
+            q.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                optionElement.addEventListener('click', () => selectOption(index, optionElement));
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        // Επιλογή απάντησης από τον χρήστη
+        function selectOption(optionIndex, optionElement) {
+            if (selectedOption !== null) return;
+            
+            const q = questions[currentQuestion];
+            const allOptions = document.querySelectorAll('.option');
+            
+            // Αφαίρεση προηγούμενης επιλογής
+            allOptions.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Επισήμανση της επιλεγμένης απάντησης
+            optionElement.classList.add('selected');
+            selectedOption = optionIndex;
+            
+            // Έλεγχος της απάντησης
+            if (optionIndex === q.correct) {
+                optionElement.classList.add('correct');
+                feedback.textContent = q.explanation;
+                feedback.classList.add('correct');
+                feedback.style.display = 'block';
+                score += 10;
+                correctAnswers++;
+            } else {
+                optionElement.classList.add('wrong');
+                
+                // Επισήμανση της σωστής απάντησης
+                allOptions[q.correct].classList.add('correct');
+                
+                feedback.textContent = `Λάθος. ${q.explanation}`;
+                feedback.classList.add('wrong');
+                feedback.style.display = 'block';
+            }
+            
+            // Ενεργοποίηση του κουμπιού "Επόμενη"
+            nextBtn.disabled = false;
+        }
+
+        // Επόμενη ερώτηση
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        // Τερματισμός του παιχνιδιού και εμφάνιση αποτελεσμάτων
+        function endGame() {
+            gameCompleted = true;
+            gameArea.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            finalScoreElement.textContent = `${correctAnswers}/${questions.length}`;
+            scoreTextElement.textContent = `Απαντήσατε σωστά ${correctAnswers} από τις ${questions.length} ερωτήσεις (${percentage}%)`;
+            
+            // Προσαρμοσμένο μήνυμα ανάλογα με το σκορ
+            let message = "";
+            if (percentage === 100) {
+                message = "Εξαιρετικά! Είστε πραγματικός ειδικός στον μύθο της Θέτιδας! Η γνώση σας είναι θεϊκή! 🏆";
+            } else if (percentage >= 80) {
+                message = "Πολύ καλά! Γνωρίζετε εξαιρετικά τον μύθο της Θέτιδας! Μοιάζετε με σοφό του Ολύμπου! 🌟";
+            } else if (percentage >= 60) {
+                message = "Καλή δουλειά! Έχετε καλή γνώση του μύθου της Θέτιδας! Η Θέτις θα ήταν περήφανη! 👍";
+            } else if (percentage >= 40) {
+                message = "Έχετε κάποιες γνώσεις για τη Θέτιδα. Διαβάστε την παρουσίαση ξανά για να βελτιωθείτε! 📚";
+            } else {
+                message = "Θα χρειαστεί να μελετήσετε περισσότερο τον μύθο της Θέτιδας. Η παρουσίαση σίγουρα θα σας βοηθήσει! 🧠";
+            }
+            
+            resultMessageElement.textContent = message;
+        }
+
+        // Επανεκκίνηση του παιχνιδιού
+        function restartGame() {
+            initGame();
+        }
+
+        // Επιστροφή στην αρχική σελίδα
+        function goToHome() {
+            window.location.href = 'https://conchr.github.io/Myth/';
+        }
+
+        // Αρχικοποίηση κατά τη φόρτωση της σελίδας
+        document.addEventListener('DOMContentLoaded', initGame);
+        
+        // Προσθήκη event listeners στα κουμπιά
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartGame);
+        backBtn.addEventListener('click', goToHome);
+        resultsBackBtn.addEventListener('click', goToHome);
+    </script>
+</body>
+</html>
