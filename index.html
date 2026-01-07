@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Παιχνίδι Γνώσεων: Ο Μύθος της Θέτιδας</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,95 +11,123 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --light-gold: #e8c878;
+            --dark-blue: #1a2a3a;
+            --medium-blue: #2c3e50;
+            --light-blue: #3a506b;
+            --text-light: #f5f5f5;
         }
 
         body {
-            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
-            color: #f5f5f5;
+            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--medium-blue) 100%);
+            color: var(--text-light);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
+            overflow-x: hidden;
         }
 
         .game-container {
             width: 100%;
             max-width: 900px;
+            min-height: 500px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 3px solid #d4af37;
-            margin-top: 20px;
+            border: 3px solid var(--gold);
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 3px solid rgba(212, 175, 55, 0.5);
+            flex-shrink: 0;
         }
 
         .header h1 {
-            font-size: 2.8rem;
-            color: #d4af37;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            color: var(--gold);
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            line-height: 1.2;
         }
 
         .header h2 {
-            font-size: 1.8rem;
-            color: #e8c878;
+            font-size: clamp(1.1rem, 3.5vw, 1.8rem);
+            color: var(--light-gold);
             font-weight: normal;
+            line-height: 1.3;
         }
 
         .question-container {
             background-color: rgba(26, 42, 58, 0.9);
-            padding: 30px;
+            padding: clamp(15px, 3vw, 30px);
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border: 2px solid rgba(212, 175, 55, 0.3);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .question-number {
-            color: #d4af37;
-            font-size: 1.4rem;
+            color: var(--gold);
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             margin-bottom: 10px;
             text-align: center;
         }
 
         .question-text {
-            font-size: 1.8rem;
-            line-height: 1.5;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            line-height: 1.4;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: clamp(20px, 4vw, 30px);
             color: #ffffff;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .options-container {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: clamp(10px, 2vw, 15px);
+            flex-grow: 2;
         }
 
         .option {
             background-color: rgba(52, 73, 94, 0.9);
-            border: 2px solid #3a506b;
+            border: 2px solid var(--light-blue);
             border-radius: 12px;
-            padding: 18px 20px;
-            font-size: 1.4rem;
+            padding: clamp(14px, 3vw, 18px) clamp(15px, 3vw, 20px);
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            min-height: 70px;
+            user-select: none;
         }
 
-        .option:hover {
+        .option:hover, .option:active {
             background-color: rgba(67, 97, 133, 0.9);
-            border-color: #d4af37;
+            border-color: var(--gold);
             transform: translateY(-3px);
         }
 
@@ -119,17 +147,17 @@
         }
 
         .option-letter {
-            background-color: #2c3e50;
-            color: #f5f5f5;
-            width: 40px;
-            height: 40px;
+            background-color: var(--medium-blue);
+            color: var(--text-light);
+            width: clamp(35px, 8vw, 40px);
+            height: clamp(35px, 8vw, 40px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            margin-right: clamp(10px, 3vw, 15px);
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             flex-shrink: 0;
         }
 
@@ -146,12 +174,13 @@
         }
 
         .feedback {
-            padding: 20px;
+            padding: clamp(15px, 3vw, 20px);
             border-radius: 12px;
-            margin-top: 20px;
-            font-size: 1.4rem;
+            margin-top: clamp(15px, 3vw, 20px);
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             display: none;
             text-align: center;
+            flex-shrink: 0;
         }
 
         .feedback.correct {
@@ -169,12 +198,14 @@
         .buttons-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 25px;
+            gap: 15px;
+            flex-shrink: 0;
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 1.4rem;
+            padding: clamp(12px, 3vw, 15px) clamp(20px, 4vw, 30px);
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -183,122 +214,267 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex: 1;
+            min-height: 55px;
+            user-select: none;
         }
 
         .btn i {
-            margin-right: 10px;
+            margin-right: clamp(5px, 2vw, 10px);
         }
 
         .btn-next {
-            background-color: #d4af37;
-            color: #2c3e50;
+            background-color: var(--gold);
+            color: var(--dark-blue);
         }
 
-        .btn-next:hover {
-            background-color: #e8c878;
+        .btn-next:hover, .btn-next:active {
+            background-color: var(--light-gold);
             transform: translateY(-3px);
             box-shadow: 0 7px 14px rgba(212, 175, 55, 0.4);
         }
 
         .btn-restart {
-            background-color: #3a506b;
-            color: #f5f5f5;
+            background-color: var(--light-blue);
+            color: var(--text-light);
         }
 
-        .btn-restart:hover {
+        .btn-restart:hover, .btn-restart:active {
             background-color: #4a6a8b;
             transform: translateY(-3px);
         }
 
         .btn-back {
-            background-color: #2c3e50;
-            color: #f5f5f5;
+            background-color: var(--medium-blue);
+            color: var(--text-light);
         }
 
-        .btn-back:hover {
-            background-color: #3a506b;
+        .btn-back:hover, .btn-back:active {
+            background-color: var(--light-blue);
             transform: translateY(-3px);
         }
 
         .results-container {
             text-align: center;
-            padding: 40px;
+            padding: clamp(25px, 5vw, 40px);
             display: none;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
         }
 
         .results-title {
-            font-size: 3rem;
-            color: #d4af37;
-            margin-bottom: 30px;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--gold);
+            margin-bottom: clamp(20px, 4vw, 30px);
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
         }
 
         .score-display {
-            font-size: 5rem;
+            font-size: clamp(3rem, 10vw, 5rem);
             color: #ffffff;
-            margin: 30px 0;
+            margin: clamp(20px, 4vw, 30px) 0;
             background-color: rgba(0, 0, 0, 0.5);
             display: inline-block;
-            padding: 20px 50px;
+            padding: clamp(15px, 4vw, 20px) clamp(30px, 8vw, 50px);
             border-radius: 20px;
-            border: 4px solid #d4af37;
+            border: 4px solid var(--gold);
+            line-height: 1;
         }
 
         .score-text {
-            font-size: 2rem;
-            color: #e8c878;
-            margin-bottom: 40px;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: var(--light-gold);
+            margin-bottom: clamp(25px, 5vw, 40px);
+            line-height: 1.4;
         }
 
         .message {
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
             color: #ffffff;
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: clamp(20px, 4vw, 30px);
+            padding: clamp(15px, 3vw, 20px);
             border-radius: 12px;
             background-color: rgba(0, 0, 0, 0.4);
+            line-height: 1.4;
         }
 
-        @media (max-width: 768px) {
+        /* Landscape-specific adjustments */
+        @media (orientation: landscape) and (max-height: 700px) {
+            body {
+                padding: 10px;
+                justify-content: flex-start;
+            }
+            
             .game-container {
-                padding: 20px;
-                margin-top: 10px;
+                padding: 15px;
+                margin-top: 5px;
+                min-height: auto;
             }
             
-            .header h1 {
-                font-size: 2rem;
+            .header {
+                margin-bottom: 15px;
+                padding-bottom: 10px;
             }
             
-            .header h2 {
-                font-size: 1.4rem;
+            .question-container {
+                padding: 15px;
+                margin-bottom: 15px;
             }
             
             .question-text {
-                font-size: 1.5rem;
+                margin-bottom: 15px;
+                font-size: 1.4rem;
             }
             
             .option {
+                padding: 10px 15px;
                 font-size: 1.2rem;
-                padding: 15px;
+                min-height: 60px;
+            }
+            
+            .buttons-container {
+                margin-top: 15px;
             }
             
             .btn {
-                padding: 12px 20px;
+                padding: 10px 20px;
                 font-size: 1.2rem;
+                min-height: 50px;
+            }
+        }
+
+        /* Portrait-specific adjustments */
+        @media (orientation: portrait) and (max-width: 768px) {
+            .game-container {
+                height: 90vh;
+                max-height: 800px;
             }
             
-            .results-title {
-                font-size: 2.2rem;
+            .question-container {
+                overflow-y: auto;
             }
             
-            .score-display {
-                font-size: 3.5rem;
-                padding: 15px 30px;
+            .options-container {
+                max-height: 50vh;
+                overflow-y: auto;
+                padding-right: 5px;
             }
             
-            .score-text {
-                font-size: 1.6rem;
+            /* Custom scrollbar for options */
+            .options-container::-webkit-scrollbar {
+                width: 6px;
             }
+            
+            .options-container::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+            }
+            
+            .options-container::-webkit-scrollbar-thumb {
+                background: var(--gold);
+                border-radius: 10px;
+            }
+        }
+
+        /* Small screens */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .game-container {
+                padding: 15px;
+                border-width: 2px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .option-letter {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+                margin-right: 10px;
+            }
+        }
+
+        /* Large screens */
+        @media (min-width: 1200px) {
+            .game-container {
+                max-width: 1000px;
+            }
+            
+            .question-text {
+                font-size: 2rem;
+            }
+            
+            .option {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Prevent text zoom on mobile */
+        @media (max-width: 768px) {
+            body {
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+            }
+        }
+
+        /* Fix for iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            .game-container {
+                min-height: -webkit-fill-available;
+            }
+            
+            body {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Animation for better UX */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-container, .results-container {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Loading state */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            font-size: 1.5rem;
+            color: var(--light-gold);
+        }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles for keyboard navigation */
+        .option:focus, .btn:focus {
+            outline: 3px solid var(--gold);
+            outline-offset: 2px;
         }
     </style>
 </head>
@@ -632,14 +808,20 @@
                     <div class="option-text">${option}</div>
                 `;
                 
+                // Χρήση των touch και click events για καλύτερη απόκριση
                 optionElement.addEventListener('click', () => selectOption(index, optionElement));
+                optionElement.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    selectOption(index, optionElement);
+                }, {passive: false});
+                
                 optionsContainer.appendChild(optionElement);
             });
         }
 
         // Επιλογή απάντησης από τον χρήστη
         function selectOption(optionIndex, optionElement) {
-            if (selectedOption !== null) return;
+            if (selectedOption !== null || gameCompleted) return;
             
             const q = questions[currentQuestion];
             const allOptions = document.querySelectorAll('.option');
@@ -674,14 +856,23 @@
             
             // Ενεργοποίηση του κουμπιού "Επόμενη"
             nextBtn.disabled = false;
+            
+            // Αυτόματη κύλιση προς τα κάτω για να φαίνεται η ανατροφοδότηση
+            setTimeout(() => {
+                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
         }
 
         // Επόμενη ερώτηση
         function nextQuestion() {
+            if (nextBtn.disabled) return;
+            
             currentQuestion++;
             
             if (currentQuestion < questions.length) {
                 showQuestion();
+                // Αυτόματη κύλιση στην αρχή της ερώτησης
+                questionText.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
                 endGame();
             }
@@ -691,7 +882,7 @@
         function endGame() {
             gameCompleted = true;
             gameArea.style.display = 'none';
-            resultsContainer.style.display = 'block';
+            resultsContainer.style.display = 'flex';
             
             const percentage = Math.round((correctAnswers / questions.length) * 100);
             finalScoreElement.textContent = `${correctAnswers}/${questions.length}`;
@@ -700,15 +891,15 @@
             // Προσαρμοσμένο μήνυμα ανάλογα με το σκορ
             let message = "";
             if (percentage === 100) {
-                message = "Εξαιρετικά! Είστε πραγματικός ειδικός στον μύθο της Θέτιδας! Η γνώση σας είναι θεϊκή! 🏆";
+                message = "🏆 Εξαιρετικά! Είστε πραγματικός ειδικός στον μύθο της Θέτιδας! Η γνώση σας είναι θεϊκή!";
             } else if (percentage >= 80) {
-                message = "Πολύ καλά! Γνωρίζετε εξαιρετικά τον μύθο της Θέτιδας! Μοιάζετε με σοφό του Ολύμπου! 🌟";
+                message = "🌟 Πολύ καλά! Γνωρίζετε εξαιρετικά τον μύθο της Θέτιδας! Μοιάζετε με σοφό του Ολύμπου!";
             } else if (percentage >= 60) {
-                message = "Καλή δουλειά! Έχετε καλή γνώση του μύθου της Θέτιδας! Η Θέτις θα ήταν περήφανη! 👍";
+                message = "👍 Καλή δουλειά! Έχετε καλή γνώση του μύθου της Θέτιδας! Η Θέτις θα ήταν περήφανη!";
             } else if (percentage >= 40) {
-                message = "Έχετε κάποιες γνώσεις για τη Θέτιδα. Διαβάστε την παρουσίαση ξανά για να βελτιωθείτε! 📚";
+                message = "📚 Έχετε κάποιες γνώσεις για τη Θέτιδα. Διαβάστε την παρουσίαση ξανά για να βελτιωθείτε!";
             } else {
-                message = "Θα χρειαστεί να μελετήσετε περισσότερο τον μύθο της Θέτιδας. Η παρουσίαση σίγουρα θα σας βοηθήσει! 🧠";
+                message = "🧠 Θα χρειαστεί να μελετήσετε περισσότερο τον μύθο της Θέτιδας. Η παρουσίαση σίγουρα θα σας βοηθήσει!";
             }
             
             resultMessageElement.textContent = message;
@@ -717,6 +908,8 @@
         // Επανεκκίνηση του παιχνιδιού
         function restartGame() {
             initGame();
+            // Αυτόματη κύλιση στην αρχή
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Επιστροφή στην αρχική σελίδα
@@ -724,14 +917,97 @@
             window.location.href = 'https://conchr.github.io/Myth/';
         }
 
+        // Προσαρμογή διαστάσεων για το viewport
+        function adjustLayoutForViewport() {
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const gameContainer = document.querySelector('.game-container');
+            
+            if (isPortrait && window.innerHeight < 700) {
+                gameContainer.style.minHeight = 'auto';
+                gameContainer.style.maxHeight = '95vh';
+            } else if (!isPortrait && window.innerHeight < 500) {
+                gameContainer.style.minHeight = 'auto';
+                gameContainer.style.padding = '15px';
+            }
+        }
+
+        // Προσαρμογή font-size για πολύ μικρές οθόνες
+        function adjustFontSizes() {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // Αν η οθόνη είναι πολύ μικρή, κάνουμε περαιτέρω προσαρμογές
+            if (viewportWidth < 350) {
+                document.querySelector('.question-text').style.fontSize = '1.1rem';
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.style.fontSize = '1rem';
+                });
+            }
+            
+            if (viewportHeight < 600 && window.innerWidth > window.innerHeight) {
+                // Landscape με χαμηλό ύψος
+                document.querySelector('.question-text').style.fontSize = '1.2rem';
+            }
+        }
+
         // Αρχικοποίηση κατά τη φόρτωση της σελίδας
-        document.addEventListener('DOMContentLoaded', initGame);
-        
-        // Προσθήκη event listeners στα κουμπιά
-        nextBtn.addEventListener('click', nextQuestion);
-        restartBtn.addEventListener('click', restartGame);
-        backBtn.addEventListener('click', goToHome);
-        resultsBackBtn.addEventListener('click', goToHome);
+        document.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            adjustLayoutForViewport();
+            adjustFontSizes();
+            
+            // Προσθήκη event listeners στα κουμπιά
+            nextBtn.addEventListener('click', nextQuestion);
+            nextBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                nextQuestion();
+            }, {passive: false});
+            
+            restartBtn.addEventListener('click', restartGame);
+            restartBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                restartGame();
+            }, {passive: false});
+            
+            backBtn.addEventListener('click', goToHome);
+            resultsBackBtn.addEventListener('click', goToHome);
+            
+            // Προσθήκη keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (gameCompleted) return;
+                
+                if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
+                    const optionIndex = parseInt(e.key) - 1;
+                    const options = document.querySelectorAll('.option');
+                    if (optionIndex >= 0 && optionIndex < options.length && selectedOption === null) {
+                        options[optionIndex].click();
+                    }
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    if (selectedOption !== null && !nextBtn.disabled) {
+                        nextQuestion();
+                    }
+                } else if (e.key === 'ArrowLeft' && currentQuestion > 0) {
+                    // Προσοχή: Σε αυτή την έκδοση δεν έχουμε back button για ερωτήσεις
+                    // αλλά το κρατάμε για μελλοντική χρήση
+                } else if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+                    nextQuestion();
+                }
+            });
+        });
+
+        // Προσαρμογή κατά την αλλαγή μεγέθους ή προσανατολισμού
+        window.addEventListener('resize', () => {
+            adjustLayoutForViewport();
+            adjustFontSizes();
+        });
+
+        window.addEventListener('orientationchange', () => {
+            // Προσθήκη μικρής καθυστέρησης για να προλάβει να συμβεί το orientation change
+            setTimeout(() => {
+                adjustLayoutForViewport();
+                adjustFontSizes();
+            }, 300);
+        });
     </script>
 </body>
 </html>
